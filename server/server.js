@@ -19,11 +19,29 @@ server.listen(PORT, () => {
 io.on('connection', (socket) => {
     console.log('New User Connected!');
 
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome to the chatroom!',
+        createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text: 'New user joined the chat room!',
+        createdAt: new Date().getTime()
+    });
+
     socket.on('createMessage', (message) => {
         io.emit('newMessage', {
             from: message.from,
             text: message.text,
             createdAt: new Date().getTime()
         });
+        // socket.broadcast.emit('newMessage', {
+        //         from: message.from,
+        //         text: message.text,
+        //         createdAt: new Date().getTime()
+        //     });
     });
+
 });
