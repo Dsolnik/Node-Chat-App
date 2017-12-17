@@ -1,4 +1,5 @@
 var socket = io();
+var arrMessages = [];
 
 socket.on('connect', function () {
     var params = jQuery.deparam(window.location.search);
@@ -34,8 +35,18 @@ function scrollToBottom() {
 socket.on('newMessage', function (message) {
     var formattedTime = moment(message.createdAt).format('h:mm a');
     var template = jQuery('#message-template').html();
+    var text = message.text + ' ';
+    var currentItem = {
+        text,
+        from: message.from,
+        createdAt: formattedTime
+    };
+    arrMessages.push(currentItem);
+    if (censorButton.hasClass('activated')) {
+        currentItem.text = censorWords(currentItem.text).newString;
+    }
     var html = Mustache.render(template, {
-        text: message.text,
+        text,
         from: message.from,
         createdAt: formattedTime
     });
@@ -81,9 +92,17 @@ var uncensoredHTML;
 
 censorButton.on('click', function() {
     censorButton.toggleClass('activated');
-    jQuery('div.message__body p').each(function() {
-        this.innerHTML = censorWords(this.innerHTML).newString;
-    });
+    if (censorButton.hasClass('activated')) {
+        jQuery('div.message__body p').each(function() {
+            this.innerHTML = censorWords(this.innerHTML).newString;
+        });    
+    } else {
+        var curr = 0;
+        jQuery('div.message__body p').each(function() {
+            this.innerHTML = arrMessages[curr].text;
+            curr += 1;
+        });
+    }
 });
 
 var locationButton = jQuery('#send-location');
