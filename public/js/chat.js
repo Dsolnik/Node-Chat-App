@@ -38,18 +38,20 @@ socket.on('newMessage', function (message) {
     var formattedTime = moment(message.createdAt).format('h:mm a');
     var template = jQuery('#message-template').html();
     var text = message.text + ' ';
-    var currentItem = {
+    arrMessages.push({
         text,
         from: message.from,
         createdAt: formattedTime
-    };
-    arrMessages.push(currentItem);
+    });
     // if we are censoring items, censor the currentItem
     if (censorButton.hasClass('activated')) {
-        var newText = censorWords(currentItem.text).newString;
-        currentItem = jQuery.extend(true,  currentItem, {text: newText});
+        text = censorWords(text).newString;
     }
-    var html = Mustache.render(template, currentItem);
+    var html = Mustache.render(template, {
+        text,
+        from: message.from,
+        createdAt: formattedTime
+    });
     jQuery('#messages').append(html);
     scrollToBottom();
 });
