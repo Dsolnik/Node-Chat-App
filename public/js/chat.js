@@ -75,6 +75,17 @@ jQuery('#message-form').on('submit', function (e) {
     });
 });
 
+var censorButton = jQuery('#censor');
+
+var uncensoredHTML;
+
+censorButton.on('click', function() {
+    censorButton.toggleClass('activated');
+    jQuery('div.message__body p').each(function() {
+        this.innerHTML = censorWords(this.innerHTML).newString;
+    });
+});
+
 var locationButton = jQuery('#send-location');
 
 locationButton.on('click', function () {
