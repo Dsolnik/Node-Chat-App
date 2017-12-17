@@ -12,7 +12,7 @@ function censorHTML() {
 
 function censorWords(string) {
     function astericks(match, offset, string) {
-        console.log('matched',match);
+        // console.log('matched',match);
         arrMatches.push(match);
         return '*'.repeat(match.length);
     }

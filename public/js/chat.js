@@ -1,5 +1,6 @@
 var socket = io();
 var arrMessages = [];
+var censorButton = jQuery('#censor');
 
 socket.on('connect', function () {
     var params = jQuery.deparam(window.location.search);
@@ -33,6 +34,7 @@ function scrollToBottom() {
 }
 
 socket.on('newMessage', function (message) {
+    console.log('got here!FUCK');
     var formattedTime = moment(message.createdAt).format('h:mm a');
     var template = jQuery('#message-template').html();
     var text = message.text + ' ';
@@ -42,14 +44,12 @@ socket.on('newMessage', function (message) {
         createdAt: formattedTime
     };
     arrMessages.push(currentItem);
+    // if we are censoring items, censor the currentItem
     if (censorButton.hasClass('activated')) {
-        currentItem.text = censorWords(currentItem.text).newString;
+        var newText = censorWords(currentItem.text).newString;
+        currentItem = jQuery.extend(true,  currentItem, {text: newText});
     }
-    var html = Mustache.render(template, {
-        text,
-        from: message.from,
-        createdAt: formattedTime
-    });
+    var html = Mustache.render(template, currentItem);
     jQuery('#messages').append(html);
     scrollToBottom();
 });
@@ -85,10 +85,6 @@ jQuery('#message-form').on('submit', function (e) {
         messageTextBox.val('');
     });
 });
-
-var censorButton = jQuery('#censor');
-
-var uncensoredHTML;
 
 censorButton.on('click', function() {
     censorButton.toggleClass('activated');
