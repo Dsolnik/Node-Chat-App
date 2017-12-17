@@ -23,6 +23,18 @@
                 <div class="form-field">
                     <button>Join</button>
                 </div>
+                <div class="form-field">
+                    <% if (rooms.length > 0) {%>
+                    <label>Some Current Rooms:</label>
+                    <h5>
+                    <% for(var i=0; i<rooms.length; i++) { %>
+                    <%=rooms[i]%><%if (i != rooms.length - 1) {%>,<%}%>       
+                    <%} %>
+                    </h5>
+                    <%} else {%>
+                    <label>No Rooms Currently Open</label>                        
+                    <%}%>
+                </div>                
             </form>
     </body>
 </html>

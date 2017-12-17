@@ -14,7 +14,14 @@ var server = http.createServer(app);
 var io = socketIO(server);
 var users = new Users();
 
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => {
+    res.render('index', {rooms: users.getRoomList()});
+});
+
 app.use(express.static(publicPath));
+
 
 server.listen(PORT, () => {
     console.log(`server is up on port ${PORT}`)

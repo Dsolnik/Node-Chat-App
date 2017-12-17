@@ -25,6 +25,17 @@ class Users {
         var users = _.filter(this.users, {room});
         return users.map((user) => user.name);
     }
+
+    getRoomList () {
+        var seen = {}, distinct_arr = [], i, length = this.users.length;
+        for(i = 0; i < length; i++) {
+            var currRoom = this.users[i].room;
+            if (seen[currRoom]) continue;
+            seen[currRoom] = true;
+            distinct_arr.push(currRoom);
+        }
+        return distinct_arr;
+    }
 }
 
 module.exports = {Users};

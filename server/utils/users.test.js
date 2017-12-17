@@ -75,4 +75,9 @@ describe('Users', () => {
 
     expect(userList).toEqual(['Jen']);
   });
+
+  it('should return two rooms when getting room list', () => {
+    var roomList = users.getRoomList();
+    expect(roomList.length).toBe(2);
+  })
 });
