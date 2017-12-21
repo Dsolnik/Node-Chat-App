@@ -59,12 +59,6 @@ socket.on('newMessage', function (message) {
 socket.on('newLocationMessage', function (message) {
     var formattedTime = moment(message.createdAt).format('h:mm a');
     var template = jQuery('#location-message-template').html();
-    var text = message.text + ' ';
-    arrMessages.push({
-        text,
-        from: message.from,
-        createdAt: formattedTime
-    });
     var html = Mustache.render(template, {
         url: message.url,
         from: message.from,
@@ -97,12 +91,12 @@ jQuery('#message-form').on('submit', function (e) {
 censorButton.on('click', function() {
     censorButton.toggleClass('activated');
     if (censorButton.hasClass('activated')) {
-        jQuery('div.message__body p').each(function() {
+        jQuery('div.message__body.regular_message p').each(function() {
             this.innerHTML = censorWords(this.innerHTML).newString;
         });    
     } else {
         var curr = 0;
-        jQuery('div.message__body p').each(function() {
+        jQuery('div.message__body.regular_message p').each(function() {
             this.innerHTML = arrMessages[curr].text;
             curr += 1;
         });
